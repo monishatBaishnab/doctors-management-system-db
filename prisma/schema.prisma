@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model doctors {
+  doctor_id      Int     @id @default(autoincrement())
+  first_name     String  @db.VarChar(255)
+  last_name      String  @db.VarChar(255)
+  email          String  @unique @db.VarChar(255)
+  phone_number   String? @db.VarChar(255)
+  address        String? @db.VarChar(255)
+  specialization String? @db.VarChar(255)
+}
+
+enum gender {
+  mail
+  femail
+}
+
+model patients {
+  patient_id    Int       @id @default(autoincrement())
+  first_name    String    @db.VarChar(255)
+  last_name     String    @db.VarChar(255)
+  email         String    @unique @db.VarChar(255)
+  phone_number  String?   @db.VarChar(255)
+  address       String?   @db.VarChar(255)
+  date_of_birth DateTime?
+  gender        gender?
+}
+
+enum appointment_status {
+  scheduled
+  completed
+  cancelled
+}
+
+model appointments {
+  appointment_id   Int                @id @default(autoincrement())
+  //neet to be create it foreign key contstraint
+  dictor_id        Int
+  //neet to be create it foreign key contstraint
+  patient_id       Int
+  appointment_date DateTime
+  status           appointment_status
+}
+
+model prescriptions {
+  prescription_id Int     @id @default(autoincrement())
+  //neet to be create it foreign key contstraint
+  appointment_id  Int
+  medication      String  @db.VarChar(255)
+  dosage          String  @db.VarChar(255)
+  instructions    String? @db.VarChar(255)
+}
+
+model medical_records {
+  record_id   Int     @id @default(autoincrement())
+  //neet to be create it foreign key contstraint
+  patient_id  Int
+  diagnosis   String? @db.VarChar(255)
+  treatment   String  @db.VarChar(255)
+  record_date String  @db.VarChar(255)
+}
+
+model departments {
+  department_id   Int    @id @default(autoincrement())
+  department_name String @db.VarChar(255)
+  //neet to be create it foreign key contstraint
+  department_head Int
+}
